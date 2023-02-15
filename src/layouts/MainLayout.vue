@@ -138,7 +138,7 @@ import HeaderPromo from "../components/promo/HeaderPromo.vue";
 import BreadcrumbsHeader from "../components/navs/BreadcrumbsHeader.vue";
 import LeftPart from "../components/parts/LeftPart.vue";
 
-const leftDrawerOpen = ref(true);
+const leftDrawerOpen = ref(false);
 const rightDrawerOpen = ref(false);
 const authStore = useAuthStore();
 

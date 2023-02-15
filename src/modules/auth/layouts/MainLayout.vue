@@ -19,7 +19,7 @@ const $q = useQuasar();
 $q.dark.set(false);
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .wave {
   position: fixed;
   height: 100%;
@@ -34,7 +34,7 @@ $q.dark.set(false);
 
 .bg-auth {
   background-color: #f0f4f3;
-  background-image: url("src/assets/login/bg-auth.png");
+  //background-image: url("src/assets/login/bg-auth.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;

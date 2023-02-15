@@ -20,9 +20,7 @@
       <q-separator />
 
       <q-card-section>
-        <q-card-section>
-          <slot />
-        </q-card-section>
+        <slot />
       </q-card-section>
     </q-card>
   </div>
