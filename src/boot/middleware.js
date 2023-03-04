@@ -1,5 +1,5 @@
 import { boot } from "quasar/wrappers";
-import { useAuthStore, useUserStore } from "stores/all";
+import { useAuthStore } from "stores/all";
 
 export default boot(async ({ router }) => {
   // Маршруты для гостей
@@ -11,13 +11,16 @@ export default boot(async ({ router }) => {
   ];
 
   router.beforeEach(async (to) => {
-    /* const authStore = useAuthStore();
-    const user = await authStore.getAuthUser();
-    if (user) {
-      const userStore = useUserStore();
-      await userStore.getCurrentUser(user.uid);
+    const authStore = useAuthStore();
+    // получить текущего пользователя
+    await authStore.getAuthUser();
+
+    if (authStore.user) {
+      console.log(authStore.user);
+      //const userStore = useUserStore();
     }
-    if (to.meta.requiresAuth && !user) {
+    // если страница закрыта для гостей, то переадресует на страницу авторизации
+    if (to.meta.auth && !user) {
       // this route requires auth, check if logged in
       // if not, redirect to login page.
       return {
@@ -27,10 +30,11 @@ export default boot(async ({ router }) => {
       };
     }
 
-    if (user && guestAuthRoutes.includes(to.name)) {
+    // Переадресует авторизованного пользователя если он зашёл на страницу для гостя
+    if (authStore.user && guestAuthRoutes.includes(to.name)) {
       return {
         path: "/",
       };
-    } */
+    }
   });
 });

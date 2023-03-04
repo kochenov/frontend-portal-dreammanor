@@ -1,20 +1,35 @@
-import {
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  sendPasswordResetEmail,
-} from "firebase/auth";
-import { auth } from "boot/firebase";
+import { api } from "boot/axios";
+
+/*
+ * Добавьте перехватчик ответов
+ */
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && [401, 419].includes(error.response.status)) {
+      console.info(
+        "[401, 419]: Пользователь не авторизован, не удалось войти в систему с помощью API"
+      );
+    }
+    return Promise.reject(error);
+  }
+);
 
 export default {
+  /**
+   * Сервис входа на сайт
+   * @param {*} payload
+   * @returns
+   */
   async login(payload) {
-    return await signInWithEmailAndPassword(
-      auth,
-      payload.email,
-      payload.password
-    );
+    return await api.post("/auth/login", payload, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    });
   },
   async logout() {
-    return await auth.signOut();
+    return await api.post("/auth/logout");
   },
   async forgotPassword(payload) {
     await api.get("/sanctum/csrf-cookie");
@@ -22,22 +37,14 @@ export default {
   },
   // Получает текущего пользователя
   async getAuthUser() {
-    return new Promise((resolve, reject) => {
-      const unsubscribe = auth.onAuthStateChanged((user) => {
-        unsubscribe();
-        resolve(user);
-      }, reject);
-    });
+    let result = await api.get("/users/me");
+    return result.data;
   },
   async resetPassword(email) {
     return await sendPasswordResetEmail(auth, email);
   },
   async registerUser(payload) {
-    return await createUserWithEmailAndPassword(
-      auth,
-      payload.email,
-      payload.password
-    );
+    return await api.post("/auth/register", payload);
   },
   sendVerification(payload) {
     return api.post("/email/verification-notification", payload);

@@ -44,10 +44,10 @@
               </div>
               <q-form class="q-gutter-md" @submit="onSubmit">
                 <q-input
-                  v-model="name"
-                  label="Ваше имя"
+                  v-model="username"
+                  label="Имя пользователя"
                   lazy-rules
-                  name="name"
+                  name="username"
                 />
                 <q-input
                   v-model="email"
@@ -100,7 +100,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { Notify } from "quasar";
 
-const name = ref(null);
+const username = ref(null);
 const email = ref(null);
 const password = ref(null);
 
@@ -110,13 +110,13 @@ const onSubmit = async () => {
   const authStore = useAuthStore();
   try {
     const user = await authStore.registration({
-      name: name.value,
+      username: username.value,
       email: email.value,
       password: password.value,
     });
     if (user) {
       Notify.create("Регистрация прошла успешно!");
-      route.push("/");
+      route.push("/login");
     }
   } catch (error) {
     console.log(error);

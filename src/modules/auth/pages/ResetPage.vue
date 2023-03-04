@@ -85,8 +85,7 @@
 import { useAuthStore } from "src/stores/all";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-//import { auth } from "../boot/firebase";
-//import { signInWithEmailAndPassword } from "firebase/auth";
+
 const route = useRouter();
 const email = ref(null);
 const authStore = useAuthStore();

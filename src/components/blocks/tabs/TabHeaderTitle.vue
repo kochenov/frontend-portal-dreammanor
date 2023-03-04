@@ -53,7 +53,7 @@ const getTitle = () => {
   let component = null;
   if (props.nav_route) {
     component = props.component_lists.find(
-      (o) => o.name_component.toLowerCase() === route.params.id
+      (o) => o.name_component.toLowerCase() === route.params.id_component
     );
   } else {
     component = props.component_lists.find((o) => {
@@ -62,18 +62,21 @@ const getTitle = () => {
       }
     });
   }
-  if (route.params.id === "") {
+  if (route.params.id_component === "") {
     router.push({ path: props.component_lists[0].to });
   }
   if (component) {
     if (props.nav_route) {
       emit("currentComponent", component.name_component);
-      navigations.current_title = component.title;
+      //navigations.current_title = component.title;
     }
     return component.title;
   } else {
     if (props.nav_route) {
-      if (route.params.id !== "" && typeof route.params.id != "undefined") {
+      if (
+        route.params.id_component !== "" &&
+        typeof route.params.id_component != "undefined"
+      ) {
         router.replace({ path: "/404" });
       }
     }
@@ -84,7 +87,7 @@ const getSubTitle = () => {
   let component = null;
   if (props.nav_route) {
     component = props.component_lists.find(
-      (o) => o.name_component.toLowerCase() === route.params.id
+      (o) => o.name_component.toLowerCase() === route.params.id_component
     );
   } else {
     component = props.component_lists.find((o) => {
@@ -100,12 +103,6 @@ const getSubTitle = () => {
 
   return null;
 };
-
-useMeta(() => {
-  return {
-    title: title.value,
-  };
-});
 </script>
 
 <style lang="scss" scoped>

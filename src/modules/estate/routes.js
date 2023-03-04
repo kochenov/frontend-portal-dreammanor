@@ -1,10 +1,10 @@
 export default [
-  /*  {
-    path: "",
-    name: "realEstateTabs",
-    //meta: { title: "" },
-    component: () => import("pages/TestPage.vue"),
-  }, */
+  {
+    path: "links/:id_component",
+    name: "links",
+    meta: { title: "Список объявлений" },
+    component: () => import("./pages/LinksPage.vue"),
+  },
   {
     path: ":id?",
     name: "realEstate",

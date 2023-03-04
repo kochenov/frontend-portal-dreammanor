@@ -1,6 +1,6 @@
-//import { routes as authRoutes } from "src/modules/auth";
+import { routes as authRoutes } from "src/modules/auth";
 import { routes as estateRoutes } from "src/modules/estate";
-import { routes as articlesRoutes } from "src/modules/articles";
+import { routes as newsRoutes } from "src/modules/news";
 
 const routes = [
   {
@@ -24,6 +24,13 @@ const routes = [
     component: () => import("layouts/MainLayout.vue"),
     children: [...estateRoutes],
   },
+  {
+    path: "/news",
+    name: "news",
+    meta: { title: "Новости" },
+    component: () => import("layouts/MainLayout.vue"),
+    children: [...newsRoutes],
+  },
 
   // Always leave this as last one,
   // but you can also remove it
@@ -43,4 +50,4 @@ const routes = [
   },
 ];
 
-export default [...routes, ...articlesRoutes];
+export default [...routes, ...authRoutes];

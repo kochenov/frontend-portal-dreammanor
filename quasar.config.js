@@ -9,6 +9,7 @@
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
 const { configure } = require("quasar/wrappers");
+const cors = require("cors");
 
 module.exports = configure(function (/* ctx */) {
   return {
@@ -27,7 +28,7 @@ module.exports = configure(function (/* ctx */) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli/boot-files
-    boot: ["axios", "firebase", "middleware"],
+    boot: ["axios", "middleware"],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
     css: ["app.scss"],
@@ -82,8 +83,16 @@ module.exports = configure(function (/* ctx */) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
     devServer: {
-      // https: true
+      https: false,
+      port: 9000,
       open: true, // opens browser window automatically
+    },
+    server: {
+      middleware: [
+        cors({
+          origin: ["http://127.0.0.1:8000"],
+        }),
+      ],
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework

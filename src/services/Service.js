@@ -26,10 +26,7 @@ export const setBreadscrumbs = (
  * @param {String} srt_title
  * @param {String} prev_str
  */
-export const setMetaTitle = async (
-  srt_title,
-  prev_str = " : Усадьба Мечты"
-) => {
+export const setMetaTitle = (srt_title, prev_str = " : Усадьба Мечты") => {
   useMeta(() => {
     return {
       title: srt_title + prev_str,

@@ -32,4 +32,15 @@ export default [
       },
     ],
   },
+  {
+    path: "/logout",
+    component: () => import("./layouts/MainLayout.vue"),
+    children: [
+      {
+        name: "logout",
+        path: "",
+        component: () => import("./pages/LogoutPage.vue"),
+      },
+    ],
+  },
 ];

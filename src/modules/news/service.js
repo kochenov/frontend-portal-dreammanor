@@ -5,17 +5,28 @@ import { api } from "boot/axios";
  */
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
-    if (error.response && [401, 419].includes(error.response.status)) {
-      console.info(
-        "[401, 419]: Пользователь не авторизован, не удалось войти в систему с помощью API"
-      );
-    }
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 export const news = {
+  async add_new_post(data) {
+    try {
+      let res = await api.post(`/news/add`, data);
+      return res.status;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  },
+  async add_new_category(data) {
+    try {
+      let res = await api.post(`/news/add/new-category`, data);
+      return res.status;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  },
   /**
    * Получение поста
    * @param {*} post_id
@@ -50,7 +61,7 @@ export const news = {
    * @param {Number} popular сортировка по просмотрам
    * @returns
    */
-  async list(category_id, limit, offset, popular) {
+  async get_news_posts(category_id, limit, offset, popular) {
     try {
       let res = await api.get(
         "/news?limit=" +
@@ -76,21 +87,6 @@ export const news = {
     try {
       let res = await api.get("/news/categories");
       return res.data.data;
-    } catch (error) {
-      console.log(error.message);
-    }
-  },
-  /**
-   * Получить комментарии к посту
-   * @param {*} post_id
-   * @returns
-   */
-  async comments(post_id) {
-    try {
-      let res = await api.get("/news.json");
-      let temp = res.data.comments;
-      let filtered = temp.filter((i) => i.news_post_id == post_id);
-      return filtered;
     } catch (error) {
       console.log(error.message);
     }

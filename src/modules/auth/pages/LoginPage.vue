@@ -93,8 +93,7 @@ import { Notify } from "quasar";
 import { useAuthStore } from "src/stores/all";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-//import { auth } from "../boot/firebase";
-//import { signInWithEmailAndPassword } from "firebase/auth";
+
 const route = useRouter();
 const email = ref(null);
 const password = ref(null);
@@ -102,10 +101,11 @@ const authStore = useAuthStore();
 const onSubmit = async () => {
   try {
     const userCredital = await authStore.login({
-      email: email.value,
+      username: email.value,
       password: password.value,
     });
-    if (userCredital.user) {
+
+    if (userCredital.status == "200") {
       Notify.create("Выполнен успешный вход!");
       route.push("/");
     }

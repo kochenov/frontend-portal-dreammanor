@@ -74,7 +74,7 @@ const currentMenu = {
   news: [
     {
       id: 1,
-      name: "all-news",
+      name: "posts/all-posts",
       label: "Все новости",
     },
     {

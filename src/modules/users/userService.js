@@ -1,6 +1,3 @@
-import { db } from "boot/firebase";
-import { ref, set, onValue, child, get } from "firebase/database";
-
 export default {
   /**
    * Add database new user

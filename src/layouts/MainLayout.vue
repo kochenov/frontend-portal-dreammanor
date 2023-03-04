@@ -35,14 +35,116 @@
           flat
           square
           fab-mini
+          icon="note_add"
+          class="q-mr-xs"
+        >
+          <q-menu>
+            <q-list dense style="min-width: 100px">
+              <q-item
+                clickable
+                @click="newsStore.open_add_news = true"
+                v-close-popup
+              >
+                <q-item-section>Новость</q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup>
+                <q-item-section>Категорию к новости</q-item-section>
+              </q-item>
+              <q-separator />
+              <q-item clickable>
+                <q-item-section>Объявление</q-item-section>
+              </q-item>
+              <q-separator />
+              <q-item clickable v-close-popup>
+                <q-item-section>Админка</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+        <q-btn
+          v-if="!authStore.user"
+          color="primary"
+          outline
+          dense
+          flat
+          square
+          fab-mini
+          icon="login"
+        >
+          <q-menu>
+            <div class="row no-wrap q-pa-lg">
+              <div class="column">
+                <div class="text-h6 q-mb-md">Авторизация</div>
+                <q-btn
+                  color="primary"
+                  label="Вход"
+                  push
+                  square
+                  icon="login"
+                  to="/login"
+                  size="sm"
+                  class="q-ma-xs q-px-xs"
+                  v-close-popup
+                />
+                <q-btn
+                  color="primary"
+                  label="Регистрация"
+                  push
+                  outline
+                  square
+                  to="/registration"
+                  size="sm"
+                  icon="person_add"
+                  class="q-ma-xs q-px-xs shadow-0"
+                  v-close-popup
+                />
+              </div>
+
+              <q-separator vertical inset class="q-mx-lg" />
+
+              <div class="column justify-center items-center">
+                <q-avatar
+                  size="72px"
+                  color="primary"
+                  text-color="white"
+                  icon="admin_panel_settings"
+                />
+              </div>
+            </div>
+          </q-menu>
+        </q-btn>
+        <q-btn
+          v-if="authStore.user"
+          color="primary"
+          outline
+          dense
+          flat
+          square
+          fab-mini
           icon="account_circle"
         >
           <q-menu>
             <div class="row no-wrap q-pa-md">
               <div class="column">
-                <div class="text-h6 q-mb-md">Settings</div>
-                <q-toggle v-model="mobileData" label="Use Mobile Data" />
-                <q-toggle v-model="bluetooth" label="Bluetooth" />
+                <div class="text-h6 q-mb-md">Аккаунт</div>
+                <q-btn
+                  color="primary"
+                  label="Профиль"
+                  outline
+                  push
+                  size="sm"
+                  class="q-mt-sm"
+                  v-close-popup
+                />
+                <q-btn
+                  color="primary"
+                  outline
+                  label="Кабинет"
+                  push
+                  size="sm"
+                  class="q-mt-sm"
+                  v-close-popup
+                />
               </div>
 
               <q-separator vertical inset class="q-mx-lg" />
@@ -52,12 +154,15 @@
                   <img src="https://cdn.quasar.dev/img/avatar4.jpg" />
                 </q-avatar>
 
-                <div class="text-subtitle1 q-mt-md q-mb-xs">John Doe</div>
+                <div class="text-subtitle1 q-mt-md q-mb-xs">
+                  {{ authStore.user.username }}
+                </div>
 
                 <q-btn
                   color="primary"
-                  label="Logout"
+                  label="Выход"
                   push
+                  to="/logout"
                   size="sm"
                   v-close-popup
                 />
@@ -123,6 +228,7 @@
 
     <q-page-container>
       <q-page class="">
+        <AddNews />
         <router-view />
       </q-page>
     </q-page-container>
@@ -130,18 +236,24 @@
 </template>
 
 <script setup>
-import { useAuthStore } from "src/stores/all";
+import { useAuthStore, useNewsStore } from "src/stores/all";
+
 import { ref } from "vue";
 import TopMenu from "../components/navs/menu/TopMenu.vue";
 import SubMenu from "../components/navs/menu/SubMenu.vue";
 import HeaderPromo from "../components/promo/HeaderPromo.vue";
 import BreadcrumbsHeader from "../components/navs/BreadcrumbsHeader.vue";
 import LeftPart from "../components/parts/LeftPart.vue";
+import { defineAsyncComponent } from "vue";
+
+const AddNews = defineAsyncComponent(() =>
+  import("src/modules/news/components/admin/newPost.vue")
+);
 
 const leftDrawerOpen = ref(false);
 const rightDrawerOpen = ref(false);
 const authStore = useAuthStore();
-
+const newsStore = useNewsStore();
 const tab = ref("home");
 const subMenuMobail = ref(null);
 

@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 //import { getError } from "../utils/helpers";
 import AuthService from "./authService";
-import { useUserStore } from "stores/all";
+//import { useUserStore } from "stores/all";
 import { Notify } from "quasar";
 
 export const useAuthStore = defineStore("authStore", {
@@ -14,23 +14,22 @@ export const useAuthStore = defineStore("authStore", {
   actions: {
     async login(payload) {
       try {
-        const userCreditals = await AuthService.login(payload);
-        this.user = userCreditals;
-        return userCreditals;
+        return await AuthService.login(payload);
       } catch (error) {
         Notify.create({ message: error.code });
       }
     },
     async logout() {
       try {
-        const userStore = useUserStore();
-        await AuthService.logout();
-        this.user = null;
-        userStore.user = null;
-        this.router.push({ path: "/login" });
+        let res = await AuthService.logout();
+        if (res.status == 200) {
+          this.user = null;
+          this.router.push({ path: "/login" });
+        }
       } catch (error) {
         this.user = null;
-        this.error = getError(error);
+        console.log(error);
+        //this.error = error;
       }
     },
     // Получение текущего пользователя
@@ -42,25 +41,33 @@ export const useAuthStore = defineStore("authStore", {
         this.user = await AuthService.getAuthUser();
 
         this.loading = false;
-        return this.user;
       } catch (error) {
         // обнуляю данные
         this.user = null;
         // флаг загрузки
         this.loading = false;
         // вывод ошибки
-        this.error = getError(error);
+        this.error = error;
       }
     },
     async registration(payload) {
       try {
-        const userStore = useUserStore();
+        //const userStore = useUserStore();
         const userCreditals = await AuthService.registerUser(payload);
-        this.user = userCreditals.user;
-        await userStore.createUser(this.user.uid, payload);
-        return this.user;
+        //await userStore.createUser(this.user.uid, payload);
+        Notify.create({
+          message: "Вы успешно зарегистрировались! Теперь можно войти на сайт",
+          color: "green",
+        });
+        this.router.push({ path: "/login" });
       } catch (error) {
-        Notify.create({ message: error.code });
+        if (error.response.data.detail == "REGISTER_USER_ALREADY_EXISTS") {
+          Notify.create({
+            message: "Пользователь с такими данными уже зарегистрирован",
+            color: "red",
+          });
+        }
+        //Notify.create({ message: error.code });
       }
     },
     async resetPassword(email) {
